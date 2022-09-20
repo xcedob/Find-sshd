@@ -1,0 +1,36 @@
+- name: Allow and Deny Users SSH
+  hosts: all
+  become: yes
+  tasks:
+      - name: Search AllowUsers
+        shell: "grep -i 'AllowUsers' /etc/ssh/sshd_config"
+        register: out1
+        ignore_errors: yes
+
+      - name: Search AllowGroups
+        shell: "grep -i 'AllowGroups' /etc/ssh/sshd_config"
+        register: out2
+        ignore_errors: yes
+
+      - name: Search DenyUsers
+        shell: "grep -i 'DenyUsers' /etc/ssh/sshd_config"
+        register: out3
+        ignore_errors: yes
+
+      - name: Search DenyGroups
+        shell: "grep -i 'DenyGroups' /etc/ssh/sshd_config"
+        register: out4
+        ignore_errors: yes
+
+      - name: Search in hosts.allow
+        shell: "grep -i 'sshd' /etc/hosts.allow"
+        register: out5
+        ignore_errors: yes
+
+      - debug:
+          msg: 
+          - "1)  {{ out1.stdout_lines }}"  
+          - "2)  {{ out2.stdout_lines }}"   
+          - "3)  {{ out3.stdout_lines }}"
+          - "4)  {{ out4.stdout_lines }}"
+          - "5)  {{ out5.stdout_lines }}"
